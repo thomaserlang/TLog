@@ -1,0 +1,12 @@
+{% raw xsrf_form_html() %}
+{% for field in form %}
+    <div class="form-group">
+        {% raw field.label() %}
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <p class="text-danger">{{ escape(error) }}</p>
+            {% end %}
+        {% end %}
+        {% raw field(class_='form-control') %}
+    </div>
+{% end %}

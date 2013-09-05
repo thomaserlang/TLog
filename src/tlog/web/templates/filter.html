@@ -1,0 +1,92 @@
+{% extends tlog.html %}
+
+
+{% block body %}
+    <style type="text/css" media="screen">
+        #editor { 
+            width:100%;
+            height:200px;
+            margin-bottom:20px;
+        }
+        #.ace_editor {
+          line-height: normal;
+        } 
+
+    </style>
+    <div class="page-header" style="margin-top:0px;">
+        <h2>{{ escape(title) }}</h2>
+    </div>
+    <form method="post" role="form">
+        {% module Form(form) %}
+        <div id="editor"></div>              
+        <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script>
+            var editor = ace.edit("editor");
+            var textarea = $('textarea[name="data"]').hide();
+            value = textarea.val();
+            try {
+                value = JSON.stringify(
+                    $.parseJSON(value),
+                    null,
+                    4
+                )
+            } catch(err){}
+            editor.getSession().setValue(
+                value
+            );
+            editor.getSession().on('change', function(){
+                textarea.val(editor.getSession().getValue());
+            });
+            editor.setTheme("ace/theme/monokai");
+            editor.getSession().setMode("ace/mode/json");
+            editor.setFontSize(16)
+        </script>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+    {% if edit %}
+        <div class="page-header">
+            <h3>Members</h3>
+        </div>
+        <div style="margin-bottom:20px;">
+            <form class="form-inline" role="form" method="post" action="/filter/{{ filter.id }}/add_member">
+                {% raw xsrf_form_html() %}
+                <select class="form-control" id="teams" style="width:400px" name="team_id">
+                    {% for team in teams %}
+                        <option value="{{ team.id }}">{{ escape(team.name) }}</option>
+                    {% end %}
+                </select>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+        </div>
+        {% if not members %}
+            <div class="alert alert-info">
+                <strong>Heads up!</strong> No teams assigned to this filter.
+            </div>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="20px">#</th>
+                        <th>Name</th>
+                        <th width="20px"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in members %}
+                        <tr>
+                            <td>{{ team.id }}</td>
+                            <td>{{ escape(team.name) }}</td>
+                            <td><a href="/filter/{{ filter.id }}/remove_member?team_id={{ team.id }}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                        </tr>
+                    {% end %}
+                </tbody>
+            </table>
+        {% end %}
+        <div class="page-header">
+            <h3>Stats</h3>
+        </div>
+        <p><strong>{{ '{}'.format(logs_per_minute) }}</strong> logs in the latest minute.</p>
+        {% module Log_chart('/api/1/chart_data/times_seen_filter/{}?days=7'.format(filter.id), height=500) %}
+    {% end %}
+{% end %}

@@ -1,0 +1,120 @@
+{% extends tlog.html %}
+
+{% block head %}
+    <script>
+        $(function(){
+            $('time.timeago').timeago();
+        })
+    </script>
+{% end %}
+
+{% block body %}
+    <div class="row" id="log_group" style="position: relative;">
+        <div class="col-xs-9">
+            {% include log_group.html %}
+            {% module Log_chart('/api/1/chart_data/times_seen_log_group/{}'.format(log_group.id), height=150) %}
+            <div class="row" style="font-size:12px;">
+                <div class="col-xs-12">
+                    {% for event in events %}
+                        <p><strong>{{ event.user.name }}</strong> {{ event.message }} <i>- <time class="timeago" datetime="{{ event.time.isoformat('T') }}Z" title="{{ event.time.isoformat('T') }}Z"></time></i></p>
+                    {% end %}
+                </div>
+            </div>
+            {% if log %}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="time_separator">
+                            <ul class="pager">
+                                {% if next_log %}
+                                    <li class="previous"><a href="/log_group/{{ log_group.id }}/{{ next_log.id }}">&larr; Newer</a></li>
+                                {% else %}
+                                    <li class="previous disabled"><a href="#">&larr; Newer</a></li>
+                                {% end %}
+                                <li>Log message at {{ log.received }} UTC</li>
+                                {% if prev_log %}
+                                    <li class="next"><a href="/log_group/{{ log_group.id }}/{{ prev_log.id }}">Older &rarr;</a></li>
+                                {% else %}
+                                    <li class="next disabled"><a href="#">Older &rarr;</a></li>
+                                {% end %}
+                            </ul>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4>General info</h4>
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Hostname</th><td>{{ escape(log.hostname) }}</td>
+                            </tr>
+                            {% if 'priority' in log.data %}
+                                <tr>
+                                    <th>Priority</th><td>{{ log.data.pop('priority') }}</td>
+                                </tr>
+                            {% end %}
+                            {% if 'facility' in log.data %}
+                                <tr>
+                                    <th>Facility</th><td>{{ syslog_facility[log.data['facility']] }} ({{ log.data.pop('facility') }})</td>
+                                </tr>
+                            {% end %}
+                            {% if 'severity' in log.data %}
+                                <tr>
+                                    <th>Severity</th><td>{{ syslog_severity[log.data['severity']] }} ({{ log.data.pop('severity') }})</td>
+                                </tr>
+                            {% end %}
+                            {% if 'timestamp' in log.data %}
+                                <tr>
+                                    <th>Timestamp</th><td>{{ log.data.pop('timestamp') }}</td>
+                                </tr>
+                            {% end %}
+                            {% if log.data %}
+                                {% import json %}
+                                <tr>
+                                    <th>Other</th><td>{{ json.dumps(log.data, sort_keys=True, indent=4, separators=(',', ': ')) }}</td>
+                                </tr>
+                            {% end %}
+                        </table>  
+                    </div>
+                </div>
+            {% end %}
+        </div>
+        <div class="col-xs-3 tlog_right_menu" id="log_group_info">
+            <div class="item">
+                <p><strong>First seen</strong></p>
+                <p><time class="timeago" datetime="{{ log_group.first_seen.isoformat('T') }}Z" title="{{ log_group.first_seen.isoformat('T') }}Z"></time>
+            </div>
+            <div class="item">
+                <p><strong>Last seen</strong></p>
+                <p><time class="timeago" datetime="{{ log_group.last_seen.isoformat('T') }}Z" title="{{ log_group.last_seen.isoformat('T') }}Z"></time>
+            </div>
+            {% if log_group.reopened %}
+                <div class="item">
+                    <p><strong>Reopened</strong></p>
+                    <p><time class="timeago" datetime="{{ log_group.reopened.isoformat('T') }}Z" title="{{ log_group.reopened.isoformat('T') }}Z"></time>
+                </div>
+            {% end %}
+            <div class="separator"></div>
+            <div class="item">
+                <p><strong><a href="/log_group_delete?log_group_id={{ log_group.id }}">Delete this log group</a></strong></p>
+            </div>
+            <div class="separator"></div>
+            {% if servers %}
+                <div class="item">
+                    <p><strong>Servers</strong></p>
+                    {% for server in servers %}
+                        <p>{{ server.count }} x {{ escape(server.name) }}</p>
+                    {% end %}
+                </div>
+            {% end %}
+            {% if filters %}
+                <div class="item">
+                    <p><strong>Matched filters</strong></p>
+                    {% for filter_ in filters %}
+                        <p><a href="/filter/{{ filter_.id }}">{{ escape(filter_.name) }}</a></p>
+                    {% end %}
+                </div>
+            {% end %}
+        </div>
+    </div>
+{% end %}

@@ -1,0 +1,41 @@
+{% extends tlog.html %}
+{% block body %}
+    <script>
+        $('#menu_filters').addClass('active');
+    </script>
+    <div style="margin-bottom:20px;">
+        <a href="/filter/new" class="btn btn-primary">Create a filter</a> 
+    </div>
+    {% if not filters %}
+        <div class="alert alert-info">
+            <strong>Heads up!</strong> Please create a filter.
+        </div>
+    {% else %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Store</th>
+                    <th>Notify</th>
+                    <th>Searchable</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for filter in filters %}
+                    <tr>
+                        <td><a href="/filter/{{ filter.id }}">{{ escape(filter.name) }}</a></td>
+                        <td>{{ filter.data.get('store', False) }}</td>
+                        <td>{{ filter.data.get('notify', False) }}</td>
+                        <td>{{ filter.data.get('searchable', False) }}</td>
+                        <td width="20px">
+                            <a href="/filter/{{ filter.id }}">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% end %}
+            </tbody>
+        </table>
+    {% end %}
+{% end %}

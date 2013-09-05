@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div id="chart" style="width: 100%;margin-bottom:20px;"></div>
+    </div>
+</div>
+<script>
+function draw() {
+    var graph = new Rickshaw.Graph.Ajax( {
+        element: document.getElementById("chart"),
+        width: document.getElementById("chart").offsetWidth,
+        height: {{ height }},
+        renderer: 'area',
+        stroke: true,
+        dataURL: '{{ url }}',
+        onComplete: function(transport) {
+            var graph = transport.graph;
+            var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                graph: graph
+            });
+            var xAxis = new Rickshaw.Graph.Axis.Time({
+                graph: graph
+            });
+            xAxis.render();
+            var yAxis = new Rickshaw.Graph.Axis.Y({
+                graph: graph
+            });
+            yAxis.render();
+            var legend = new Rickshaw.Graph.Legend( {
+                graph: graph,
+                element: document.getElementById('legend')
+
+            } );
+
+            var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+                graph: graph,
+                legend: legend
+            } );
+
+            var order = new Rickshaw.Graph.Behavior.Series.Order( {
+                graph: graph,
+                legend: legend
+            } );
+
+            var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight( {
+                graph: graph,
+                legend: legend
+            } );
+        }
+    });
+}
+$(function() {
+    draw();
+});
+</script>

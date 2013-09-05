@@ -1,0 +1,76 @@
+{% extends tlog.html %}
+
+{% block body %}
+    <script>$('#menu_search').addClass('active');</script>
+    <form role="form" class="form-inline">
+        <div class="row">
+            <div class="col-xs-10">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        {% if not results %}
+                            Query
+                        {% else %}
+                            <strong>{{results['hits']['total']}}</strong> results
+                        {% end %}
+                    </span>
+                    <input class="form-control" name="q" value="{{ escape(handler.get_argument('q', '')) }}" placeholder="Search..." />
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>
+            </div>
+        </div>
+    </form>
+    {% if results %}
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <table = class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="210px">Received</th>
+                            <th>Hostname</th>
+                            <th>Level</th>
+                            <th>Message</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results['hits']['hits'] %}
+                        <tr>
+                            <td>{{ result['_source']['received'] }}</td>                            
+                            <td>{{ escape(result['_source']['hostname']) }}</td>
+                            <td>{{ result['_source']['level'] }}</td>
+                            {% if 'message' in result['_source']['data'] %}
+                                {% if 'log_group_id' in result['_source'] %}
+                                    <td><a href="/log_group/{{ result['_source']['log_group_id'] }}">{{ escape(result['_source']['data'].pop('message')) }}</a></td>
+                                {% else %}
+                                    <td>{{ escape(result['_source']['data'].pop('message')) }}</td>                            
+                                {% end %}
+                            {% else %}
+                                <td>No message</td>
+                            {% end %}
+                            <td>{{ result['_source']['data'] }}</td>
+                        </tr>
+                        {% end %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="pagination">
+                    {% for page in pages %}
+                        <li{% if current_page == page %} class="active"{% end %}>
+                            <a href="/search?q={{escape(handler.get_argument('q', ''))}}&p={{ page }}">
+                                {{ page + 1 }}
+                            </a>
+                        </li>
+                    {% end %}
+                </ul>
+            </div>
+        </div>
+    {% end %}
+{% end %}

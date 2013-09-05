@@ -1,0 +1,92 @@
+{% extends tlog.html %}
+
+{% block head %}
+    <script>
+        function get_log_groups() {
+            $.get('/stream/log_groups', $('#form_log_groups_filter').serialize(), function(data){
+                $('#log_groups').html(data);
+                $('time.timeago').timeago();
+            });
+        }
+        function change_filter(obj) {
+            var name = $(obj).attr('name');
+            $('#form_log_groups_filter input[name='+name+']').val($(obj).val());
+            get_log_groups();
+        }
+        $(function() {
+            $('#filters').select2({
+                placeholder: "Select a filter",
+                allowClear: true
+            });
+            $('#status_levels').select2({
+                placeholder: "Select a status level",
+                allowClear: true
+            });
+            $('#order_by').select2({
+                placeholder: "Order by",
+                allowClear: false
+            });
+            setInterval(function(){ 
+                get_log_groups();
+            }, 10000);
+            get_log_groups();
+        });
+        function change_page(number) {
+            var val = parseInt($('#log_group_page').val());
+            if (val + number > -1) {
+                $('#log_group_page').val(val+number);
+                get_log_groups();
+            }
+        }
+    </script>
+{% end %}
+
+{% block body %}
+    <form role="form" id="form_log_groups_filter">
+        <input type="hidden" name="order_by" value="{{ order_by_default }}" />        
+        <input type="hidden" name="filter_id" value="" />        
+        <input type="hidden" name="status" value="{{ status_default }}" />
+        <input type="hidden" name="page" id="log_group_page" value="0" />
+    </form>
+    <script>$('#menu_stream').addClass('active');</script>
+    <div class="row" style="position: relative;min-height:300px;">        
+        <div class="col-xs-9" style="height:40px;line-height:40px;background-color:#f8f8f8;">
+            <font style="font-size:14px;font-weight:bolder;">Order: </font>
+            <select name="order_by" id="order_by" style="width:200px;" onchange="change_filter(this);">
+                {% for id, name in order_by_names %}
+                    <option value="{{ id }}" {% if order_by_default == id %}selected {% end %}>{{ escape(name) }}</option>
+                {% end %}
+            </select>
+            {% include log_group_paginator.html %}
+        </div>
+        <div class="col-xs-3" style="height:40px;line-height:40px;background-color:#f8f8f8;"></div>
+        <div class="col-xs-9" id="log_groups"></div>
+        <div class="col-xs-3" style="background-color:#f8f8f8;position: absolute;right: 0;height: 100%;">
+            {% if filters %}
+                <div style="margin-bottom:10px;margin-top:40px;">
+                    <p style="margin:0;font-weight:bolder;margin-bottom:5px;">Filter:</p>
+                    <select name="filter_id" id="filters" style="width:100%;" onchange="change_filter(this);">
+                        <option></option>
+                        {% for filter_ in filters %}
+                            <option value="{{ filter_.id }}">{{ escape(filter_.name) }}</option>
+                        {% end %}
+                    </select>
+                </div>
+            {% end %}
+            {% if status_levels %}
+                <div style="margin-bottom:10px;">
+                    <p style="margin:0;font-weight:bolder;margin-bottom:5px;">Status:</p>
+                    <select name="status" id="status_levels" style="width:100%" onchange="change_filter(this);">
+                        {% for status, text in status_levels %}
+                            <option value="{{ status }}" {% if status == status_default %}selected {% end %}>{{ escape(text) }}</option>
+                        {% end %}
+                    </select>
+                </div>
+            {% end %}
+        </div>
+        <div class="col-xs-9" style="">
+            {% include log_group_paginator.html %}
+        </div>
+           
+    </div>
+{% end %}

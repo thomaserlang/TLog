@@ -1,0 +1,7 @@
+{% if log_groups %}
+    {% for log_group in log_groups %}
+        {% include log_group.html %}
+    {% end %}
+{% else %}
+    <div class="alert alert-info" style="margin-top:20px;"><strong>Nothing here!</strong></div>
+{% end %}

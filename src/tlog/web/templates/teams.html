@@ -1,0 +1,29 @@
+{% extends tlog.html %}
+{% block body %}
+    <script>
+        $('#menu_teams').addClass('active');
+    </script>
+    <div style="margin-bottom:20px;">
+        <a href="/team/new" class="btn btn-primary">Create a team</a> 
+    </div>
+    {% if not teams %}
+        <div class="alert alert-info">
+            <strong>Heads up!</strong> Please create a team.
+        </div>
+    {% else %}
+        <table class="table table-striped">
+            <tbody>
+                {% for team in teams %}
+                    <tr onclick="location.href='/team/{{ team.id }}'">
+                        <td>{{ escape(team.name) }}</td>
+                        <td width="20px">
+                            <a href="/team/{{ team.id }}">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                        </td>
+                    </tr>
+                {% end %}
+            </tbody>
+        </table>
+    {% end %}
+{% end %}

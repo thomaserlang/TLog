@@ -1,0 +1,12 @@
+{% extends tlog.html %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-xs-10">
+        {% module Log_chart('/api/1/chart_data/times_seen_user_filters', height=300) %}
+        </div>
+        <div class="col-xs-2">
+            <div id="legend"></div>
+        </div>
+    </div>
+{% end %}

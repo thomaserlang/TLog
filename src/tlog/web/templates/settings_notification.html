@@ -1,0 +1,34 @@
+{% extends tlog.html %}
+
+{% block body %}
+    {% include settings_menu.html %}
+    <script>$('#menu_settings_notification').addClass('active');</script>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Notification types</h3>                     
+            <form role="form" method="post">
+                {% raw xsrf_form_html() %}
+                <table class="table table-striped">    
+                    <tbody>   
+                    {% for key, name, help_info in notification_types %}
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label for="id-{{ key }}">{{ escape(name) }}</label> <font color="#A9A9A9">{{ escape(help_info) }}</font>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="send_type_enabled" value="{{ key }}" type="checkbox" {% if current_user.notification_types.get(key, {}).get('enabled', False) %}checked {% end %}/> 
+                                            <input id="id-{{ key }}" class="form-control" name="{{ key }}" value="{{ escape(current_user.notification_types.get(key, {}).get('data', '')) }}" type="text" />
+                                        </label>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% end %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>                
+        </div>
+    </div>
+{% end %}

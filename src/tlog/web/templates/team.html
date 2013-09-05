@@ -1,0 +1,54 @@
+{% extends tlog.html %}
+
+
+{% block body %}
+    <div class="page-header" style="margin-top:0px;">
+        <h2>{{ escape(title) }}</h2>
+    </div>
+    <form method="post" role="form">
+        {% module Form(form) %}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    {% if edit %}
+        <div class="page-header">
+            <h3>Members</h3>
+        </div>
+        <div style="margin-bottom:20px;">
+            <form class="form-inline" role="form" method="post" action="/team/{{ team.id }}/add_member">
+                {% raw xsrf_form_html() %}
+                <select class="form-control" id="users" style="width:400px" name="user_id">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ escape(user.name) }} ({{ escape(user.email) }})</option>
+                    {% end %}
+                </select>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+        </div>
+        {% if not members %}
+            <div class="alert alert-info">
+                <strong>Heads up!</strong> No members assigned to this team.
+            </div>
+        {% else %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="20px">#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th width="20px"> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in members %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ escape(user.name) }}</td>
+                            <td>{{ escape(user.email) }}</td>
+                            <td><a href="/team/{{ team.id }}/remove_member?user_id={{ user.id }}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                        </tr>
+                    {% end %}
+                </tbody>
+            </table>
+        {% end %}
+    {% end %}
+{% end %}

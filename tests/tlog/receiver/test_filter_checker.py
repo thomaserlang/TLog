@@ -1,0 +1,185 @@
+import nose
+from unittest2 import TestCase
+from tlog.base.filter import Filter
+from tlog.receiver.filter_checker import Filter_checker, Filters_checker
+from tlog.receiver.parse.parsed import Parsed
+
+class test_filter_checker(TestCase):
+    
+    def test_check(self):
+        parsed = Parsed(
+            hostname='te-pc', 
+            level=0, 
+            data={
+                "message": "Some test message",
+            },
+            standard='Test standard',
+        )
+        filter_ = Filter(
+            id_=0,
+            version=1,
+            name='test',
+            data={}
+        )
+
+        filter_.data = {
+            'match': {
+                'data': {
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
+                }
+            }
+        }
+        self.assertTrue(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'match': {
+                'hostname': [
+                    'something wrong',
+                ],
+                'data': {
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
+                }
+            }
+        }
+        self.assertFalse(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'match': {
+                'level': [
+                    '[0-9]+'
+                ]
+            }
+        }
+        self.assertTrue(Filter_checker.check(filter_, parsed))
+
+
+        filter_.data = {
+            'match': {
+                'level': [
+                    '[5-6]+'
+                ]
+            }
+        }
+        self.assertFalse(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'match': {
+                'hostname': [
+                    'te-pc',
+                ],
+                'data': {
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
+                }
+            },
+            'notmatch': {
+                'hostname': [
+                    'te-pc',
+                ]
+            }
+        }
+        self.assertFalse(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'match': {
+                'level': [
+                    '[0-9]+'
+                ]
+            },
+            'notmatch': {
+                'hostname': [
+                    'te-pc',
+                ]
+            }
+        }
+        self.assertFalse(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'match': {
+                'level': [
+                    '[0-9]+'
+                ]
+            },
+            'notmatch': {
+                'hostname': [
+                    'kurtkurtsen',
+                ]
+            }
+        }
+        self.assertTrue(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'notmatch': {
+                'hostname': [
+                    'kurtkurtsen',
+                ]
+            }
+        }
+        self.assertTrue(Filter_checker.check(filter_, parsed))
+
+        filter_.data = {
+            'notmatch': {
+                'level': [
+                    '[0-9]+',
+                ]
+            }
+        }
+        self.assertFalse(Filter_checker.check(filter_, parsed))
+
+class test_filters_checker(TestCase):
+
+    def test_check(self):
+        parsed = Parsed(
+            hostname='te-pc', 
+            level=0, 
+            data={
+                "message": "Some test message",
+            },
+            standard='Test standard',
+        )
+        filter1 = Filter(
+            id_=1,
+            version=1,
+            name='test',
+            data={
+                'match': {
+                    'hostname': [
+                        'te-pc',
+                    ],
+                    'data': {
+                        'message': [
+                            '^[a-zA-Z ]+$'
+                        ],
+                    }
+                }
+            }
+        )
+        filter2 = Filter(
+            id_=2,
+            version=1,
+            name='test',
+            data={
+                'match': {
+                    'hostname': [
+                        'something wrong',
+                    ],
+                    'data': {
+                        'message': [
+                            '^[a-zA-Z ]+$'
+                        ],
+                    }
+                }
+            }
+        )
+        filters = [filter1, filter2]
+        filter_matches = Filters_checker.check(filters, parsed)
+        self.assertEqual(len(filter_matches), 1)
+        self.assertEqual(filter_matches[0].id, filter1.id)
+
+if __name__ == '__main__':
+    nose.run(defaultTest=__name__)
