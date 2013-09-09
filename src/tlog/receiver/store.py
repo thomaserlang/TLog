@@ -46,7 +46,7 @@ class Store(object):
         self.level = parsed.level
         self.data = parsed.data
         self.external_id = unicode(uuid4()).replace('-', '')
-        self.message_hash = hashlib.sha1(self.data.get('message', u'').encode('utf-8')).hexdigest()
+        self.message_hash = hashlib.sha1(self.data.get('message', u'')).hexdigest()
         self.received = datetime.utcnow()
         self.log_group = None
 

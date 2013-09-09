@@ -1,0 +1,20 @@
+{% extends tlog.html %}
+
+{% block body %}
+    <div style="margin:0 auto;width:330px;">
+        <div class="page-header">
+            <h2>Sign up</h2>
+        </div>
+        <form role="form" method="post">            
+            {% if errors %}
+                {% for error in errors %}
+                    <div class="alert alert-danger">
+                        <div>{{ escape(error) }}</div>
+                    </div>
+                {% end %}
+            {% end %}
+            {% module Form(form) %}
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
+    </div>
+{% end %}

@@ -1,7 +1,6 @@
 import base
 from tornado.web import authenticated
 
-
 class Handler(base.Handler):
 
     @authenticated

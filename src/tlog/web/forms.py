@@ -18,6 +18,22 @@ class Login(Base):
         validators.Required(),
     ])
 
+class Signup(Base):
+    name = TextField('Name', [
+        validators.Required(),
+        validators.Length(min=1, max=45),
+    ])
+    email = TextField('Email', [
+        validators.Required(),
+        validators.Length(min=1, max=45),
+    ])
+    password = PasswordField('Password', [
+        validators.Required(),
+    ])
+    confirm = PasswordField('Repeat password', [
+        validators.EqualTo('password', message='Passwords must match'),
+    ])
+
 class Filter(Base):
 
     name = TextField('Name', [

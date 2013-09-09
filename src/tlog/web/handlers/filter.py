@@ -16,10 +16,18 @@ class New_handler(base.Handler):
         '''
         Renders the create new filter form.
         '''
+        form = forms.Filter()
+        form.data.data = json.dumps(
+            {
+                "match": {},
+                "notmatch": {},
+                "store": True,
+            }
+        )
         self.render(
             'filter.html',
             title='New filter',
-            form=forms.Filter(),
+            form=form,
             edit=False,
         )
 

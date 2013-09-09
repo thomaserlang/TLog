@@ -77,9 +77,9 @@ If true, a log message matching the filter would trigger a notification.
     OBS! Each received log is group by its message hash.
     A notification will only be sent if there hasn't been sent on for the log group in the last 30 minutes.
 
-## save
-`save ` excepts a boolean value.
-If true the received log message will be saved.
+## store
+`store ` excepts a boolean value.
+If true the received log message will be stored.
 
 ## rate_warning
 `rate_warning` is a early warning system.

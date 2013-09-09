@@ -18,6 +18,7 @@ import handlers.stream
 import handlers.log_group
 import handlers.search
 import handlers.chart_data
+import handlers.signup
 from tlog.logger import logger
 from tornado.options import define, options
 
@@ -43,6 +44,7 @@ class Application(tornado.web.Application):
             (r'/static/(.*)', tornado.web.StaticFileHandler, {'path': static_path}),
             (r'/login', handlers.login.Handler),
             (r'/logout', handlers.logout.Handler),
+            (r'/signup', handlers.signup.Handler),
             (r'/', handlers.frontpage.Handler),
             
             (r'/filters', handlers.filters.Handler),
@@ -57,7 +59,7 @@ class Application(tornado.web.Application):
             (r'/team/([0-9]+)/add_member', handlers.team.Add_member_handler),
             (r'/team/([0-9]+)/remove_member', handlers.team.Remove_member_handler),
 
-            (r'/settings', handlers.settings.Info_handler),
+            (r'/settings', handlers.settings.Notification_handler),
             (r'/settings/info', handlers.settings.Info_handler),
             (r'/settings/notification', handlers.settings.Notification_handler),
 
@@ -74,7 +76,6 @@ class Application(tornado.web.Application):
             (r'/api/1/chart_data/times_seen_log_group/([0-9]+)', handlers.chart_data.Times_seen_log_group_handler),    
             (r'/api/1/chart_data/times_seen_filter/([0-9]+)', handlers.chart_data.Times_seen_filter_handler),
             (r'/api/1/chart_data/times_seen_user_filters', handlers.chart_data.Times_seen_user_filters_handler),
-            
         ]
         self.executor = futures.ThreadPoolExecutor(Config.data['web']['pool_size'])
 

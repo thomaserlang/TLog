@@ -116,6 +116,11 @@ class Times_seen_user_filters_handler(Times_seen_handler):
             data[filter_.id]['data'] = self.prefill_data(from_, now)
             data[filter_.id]['name'] = filter_.name
             data[filter_.id]['color'] = constants.COLORS[i]
+        if not filters:
+            data[0] = {}
+            data[0]['data'] = self.prefill_data(from_, now)
+            data[0]['name'] = ''
+            data[0]['color'] = constants.COLORS[0]
         with new_session() as session:
             query = session.query(
                 func.min(models.Times_seen_by_minute.time).label('time'),
