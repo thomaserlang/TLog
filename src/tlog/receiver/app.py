@@ -20,7 +20,7 @@ class Echo(DatagramProtocol):
 def main():
     try:
         logger.set_logger('receiver.log')
-        reactor.listenUDP(514, Echo())
+        reactor.listenUDP(Config.data['receiver']['port'], Echo())
         reactor.run()
     except Exception as e:
         logging.error(unicode(e))      

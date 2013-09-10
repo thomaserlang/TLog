@@ -65,6 +65,9 @@ class Config(object):
             'token': '',
         },
         'notification_prefix': '[TLog]',
+        'receiver': {
+            'port': 514,
+        }
     }
 
     @classmethod

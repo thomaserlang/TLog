@@ -127,13 +127,12 @@ class Store(object):
         if not save_filters:
             return False
         self.saved = False
-
         self.log_group = Log_group.add(self)
+        self.update_count(save_filters)
         if self.should_sample(times_seen=self.log_group.times_seen, last_seen=self.log_group.last_seen):
             Log_group_filters.add(save_filters, self.log_group.id)
             self.save_log()
             self.saved = True
-        self.update_count(save_filters)
         self.set_events()
         self.send_notification()
         self.send_to_elasticsearch()
@@ -213,7 +212,7 @@ class Store(object):
                 external_id=self.external_id,
                 message_hash=self.message_hash,
                 received=self.received,
-                data=json_dumps(self.data),
+                data=json_dumps(self.data).encode('zlib').encode('base64'),
                 level=self.level,
                 log_group_id=self.log_group.id,
             )

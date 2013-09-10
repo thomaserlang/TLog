@@ -96,7 +96,7 @@ class Log(object):
             external_id=query.external_id,
             received=query.received,
             message_hash=query.message_hash,
-            data=json.loads(query.data),
+            data=json.loads(query.data.decode('base64').decode('zlib')),
             hostname=query.hostname,
             level=query.level,
             log_group_id=query.log_group_id,
