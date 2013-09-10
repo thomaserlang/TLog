@@ -46,7 +46,7 @@ class test_syslog(TestCase):
         self.assertTrue('procid' not in data)
 
     def test_parse_5424(self):
-        log = '<34>1 2013-08-11T22:14:15.003Z mymachine.example.com su - ID47 [exampleSDID@32473 iut="3" eventSource="Application \\"[test\\]\\"" eventID="1011"][examplePriority@32473 class="high"] BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'
+        log = u'<34>1 2013-08-11T22:14:15.003Z mymachine.example.com su - ID47 [exampleSDID@32473 iut="3" eventSource="Application \\"[test\\]\\"" eventID="1011"][examplePriority@32473 class="high"] BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'
         syslog = Syslog.parse_5424(log)
         self.assertTrue(isinstance(syslog, Parsed))
         self.assertEqual(syslog.hostname, 'mymachine.example.com')
@@ -64,7 +64,7 @@ class test_syslog(TestCase):
         self.assertTrue(u'examplePriority@32473' in syslog.data['structured-data'])
         self.assertEqual(syslog.data['structured-data']['examplePriority@32473']['class'], 'high')
 
-        log = '<34>1 2013-08-11T22:14:15.003Z mymachine.example.com - - - - BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'
+        log = u'<34>1 2013-08-11T22:14:15.003Z mymachine.example.com - - - - BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'
         syslog = Syslog.parse_5424(log)
         self.assertTrue(isinstance(syslog, Parsed))
         self.assertEqual(syslog.hostname, 'mymachine.example.com')

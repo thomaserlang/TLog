@@ -34,6 +34,8 @@ class Syslog(object):
         :returns: str
         '''
         if message[:3] == 'BOM':
+            if isinstance(message, unicode):
+                return message[3:]
             return message[3:].decode('utf-8')
         return message
 
