@@ -2,7 +2,7 @@ import base
 import json
 from tlog.web import forms
 from tornado.web import authenticated
-from tlog.base.team import Team
+from tlog.base.team import Team, Team_exception_duplicate_name
 from tlog.base.user import Users, User_team, Users_team
 
 class New_handler(base.Handler):
@@ -30,11 +30,14 @@ class New_handler(base.Handler):
         '''
         form = forms.Team(self.request.arguments)
         if form.validate():
-            team = Team.new(
-                name=form.name.data,
-            )
-            self.redirect('/team/{}'.format(team.id))
-            return
+            try:
+                team = Team.new(
+                    name=form.name.data,
+                )
+                self.redirect('/team/{}'.format(team.id))
+                return
+            except Team_exception_duplicate_name as e:
+                form.name.errors.append(e.message)
         self.render(
             'team.html',
             title='New team',

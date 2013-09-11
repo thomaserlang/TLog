@@ -12,3 +12,13 @@ function change_status(obj) {
         $(obj).parents('.log_group').find('.message').addClass('resolved_text');
     }
 }
+
+function update_time_ago() {
+    $('time.timeago').timeago();
+    setTimeout(
+        function(){
+            update_time_ago();
+        },
+        1000
+    )
+}

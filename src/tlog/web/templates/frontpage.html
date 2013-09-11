@@ -1,12 +1,34 @@
 {% extends tlog.html %}
 
+{% block head %}
+    <script>
+        $(function(){
+            update_time_ago();
+        })
+    </script>
+{% end %}
+
 {% block body %}
     <div class="row">
         <div class="col-xs-10">
-        {% module Log_chart('/api/1/chart_data/times_seen_user_filters', height=300) %}
+            {% module Log_chart('/api/1/chart_data/times_seen_user_filters', height=300) %}
         </div>
         <div class="col-xs-2">
             <div id="legend"></div>
+        </div>
+    </div>
+    <h3>Last 24 hours</h3>
+    <div class="row">
+        <div class="col-xs-12">
+            {% if log_groups %}
+                {% for log_group in log_groups %}
+                    {% include log_group.html %}
+                {% end %}
+            {% else %}
+                <div class="alert alert-info">
+                    <strong>Heads up!</strong> Nothing found for the latest 24 hours.
+                </div>
+            {% end %}
         </div>
     </div>
 {% end %}

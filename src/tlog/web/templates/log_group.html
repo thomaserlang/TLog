@@ -1,14 +1,14 @@
 <div class="row log_group" id="{{ log_group.message_hash }}">
     <div class="col-xs-11 info">
-        <a href="/log_group/{{ log_group.id }}" class="level level-{{ log_group.level }}" title="{{ syslog_severity[log_group.level] }} - Times seen: {{ log_group.times_seen }}">
+        <div class="level level-{{ log_group.level }}" title="{{ syslog_severity[log_group.level] }} - Times seen: {{ log_group.times_seen }}">
             {{ k_formatter(log_group.times_seen) }}
-        </a>
+        </div>
         <div class="message_container">
             <div class="message{% if log_group.status == 1 %} resolved_text{% end %}" title="{{ log_group.message }}">
                 <a href="/log_group/{{ log_group.id }}">{{ log_group.message }}</a>
             </div>
             <div class="extra">
-                <a href="/log_group/{{ log_group.id }}">{{ syslog_severity[log_group.level] }} - <time class="timeago" title="{{ log_group.last_seen.isoformat('T') }}Z" datetime="{{ log_group.last_seen.isoformat('T') }}Z"></time></a>
+               {{ syslog_severity[log_group.level] }} - <time class="timeago" title="{{ log_group.last_seen.isoformat('T') }}Z" datetime="{{ log_group.last_seen.isoformat('T') }}Z"></time>
             </div>
         </div>
     </div>

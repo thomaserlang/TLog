@@ -21,7 +21,6 @@ class Handler(login.Handler):
     @tornado.gen.coroutine
     def post(self):
         form = forms.Signup(self.request.arguments)
-        errors = []
         if form.validate():
             try:
                 user = User.new(
@@ -44,12 +43,11 @@ class Handler(login.Handler):
                 self.redirect(self.get_argument('next', '/'))
                 return
             except User_exception_duplicate_email as e:
-                errors.append(e.message)
+                form.email.errors.append(e.message)
         self.render(
             'signup.html',
             title='Signup',
             form=form,
-            errors=errors,
         )
 
     @tornado.concurrent.run_on_executor

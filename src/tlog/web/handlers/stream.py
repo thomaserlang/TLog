@@ -34,7 +34,7 @@ class Log_groups_handler(base.API_HTML_Handler):
             offset=self._get_offset(),
             order_by=[
                 constants.LOG_GROUP_ORDER_BYS[self._get_order_by()],
-            ]
+            ],
         )
 
         self.render(

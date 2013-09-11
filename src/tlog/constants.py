@@ -75,8 +75,8 @@ LOG_GROUP_ORDER_BY_NAMES = (
 
 LOG_GROUP_ORDER_BY_DEFAULT = LOG_GROUP_ORDER_BY_LAST_SEEN
 
-LOG_GROUP_NOTIFICATION_MINUTE_LIMIT = 30 # only sent a notification if there hasnt been sent on in the last 30 minutes.
-FILTER_NOTIFICATION_MINUTE_LIMIT = 30 # only sent a notification if there hasnt been sent on in the last 30 minutes.
+LOG_GROUP_NOTIFICATION_MINUTE_LIMIT = 30 # only send a notification if there hasnt been sent on in the last 30 minutes.
+FILTER_NOTIFICATION_MINUTE_LIMIT = 30 # only send a notification if there hasnt been sent on in the last 30 minutes.
 
 COLORS = (
     '#F0F8FF',
