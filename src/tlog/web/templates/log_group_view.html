@@ -73,6 +73,16 @@
                                     <th>Timestamp</th><td>{{ log.data.pop('timestamp') }}</td>
                                 </tr>
                             {% end %}
+                            {% if 'app-name' in log.data %}
+                                <tr>
+                                    <th>App-name</th><td>{{ log.data.pop('app-name') }}</td>
+                                </tr>
+                            {% end %}
+                            {% if 'procid' in log.data %}
+                                <tr>
+                                    <th>Procid</th><td>{{ log.data.pop('procid') }}</td>
+                                </tr>
+                            {% end %}
                             {% if log.data %}
                                 {% import json %}
                                 <tr>
