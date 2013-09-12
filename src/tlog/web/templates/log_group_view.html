@@ -45,9 +45,11 @@
                     <div class="col-xs-12">
                         <h4>General info</h4>
                         <table class="table table-striped">
-                            <tr>
-                                <th>Message</th><td>{{ escape(log.data['message']) }}</td>
-                            </tr>
+                            {% if 'message' in log.data %}
+                                <tr>
+                                    <th>Message</th><td>{{ escape(log.data.pop('message')) }}</td>
+                                </tr>
+                            {% end %}
                             <tr>
                                 <th>Hostname</th><td>{{ escape(log.hostname) }}</td>
                             </tr>
