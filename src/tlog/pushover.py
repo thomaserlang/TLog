@@ -31,7 +31,7 @@ class Pushover(object):
             'message': message,
             'priority': priority,
         }
-        if not url:
+        if url:
             params['url'] = url
         if priority == 2:
             params['retry'] = 60
