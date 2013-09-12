@@ -6,6 +6,9 @@ from tlog.config import Config
 from alembic import command
 
 def get_config():
+    logging.info(__file__)
+    logging.info(os.path.abspath(__file__))
+    logging.info(os.path.dirname(os.path.abspath(__file__)))
     logging.info('Trying to locate alembic.ini in {}'.format(os.path.dirname(os.path.abspath(__file__))+'/../../alembic.ini'))
     cfg = alembic.config.Config(os.path.dirname(os.path.abspath(__file__))+'/../../alembic.ini')
     cfg.set_main_option('script_location', 'tlog:migrations')
