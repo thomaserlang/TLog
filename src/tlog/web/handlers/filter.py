@@ -22,6 +22,8 @@ class New_handler(base.Handler):
                 "match": {},
                 "notmatch": {},
                 "store": True,
+                "notify": False,
+                "searchable": False,
             }
         )
         self.render(

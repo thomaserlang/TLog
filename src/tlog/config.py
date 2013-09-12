@@ -46,7 +46,7 @@ class Config(object):
             'from': 'tlog@example.com'
         },
         'logging': {
-            'level': 'info',
+            'level': 'warning',
             'path': None,
             'max_size': 100 * 1000 * 1000,# ~ 95 mb
             'num_backups': 10,
@@ -58,7 +58,7 @@ class Config(object):
         'heartbeat': {
             'target_ip': 'localhost',
             'target_port': 514,
-            'wait_time': 1, # minutes
+            'wait_time': 3, # minutes
         },
         'pushover': {
             'enabled': False,

@@ -30,9 +30,6 @@
 .log_group .info .extra a {
     color:#808080;
 }
-.log_group .info .message_container{
-    float:left;
-}
 .level-0 {
     background-color:#FF0000;
 }

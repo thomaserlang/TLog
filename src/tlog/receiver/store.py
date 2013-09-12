@@ -130,9 +130,9 @@ class Store(object):
         self.log_group = Log_group.add(self)
         self.update_count(save_filters)
         if self.should_sample(times_seen=self.log_group.times_seen, last_seen=self.log_group.last_seen):
-            Log_group_filters.add(save_filters, self.log_group.id)
             self.save_log()
-            self.saved = True
+            self.saved = True        
+        Log_group_filters.add(save_filters, self.log_group.id)
         self.set_events()
         self.send_notification()
         self.send_to_elasticsearch()
