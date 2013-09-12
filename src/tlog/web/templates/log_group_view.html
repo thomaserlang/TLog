@@ -47,7 +47,7 @@
                         <table class="table table-striped">
                             {% if 'message' in log.data %}
                                 <tr>
-                                    <th>Message</th><td><code>{{ escape(log.data.pop('message')) }}</code></td>
+                                    <th>Message</th><td><pre>{{ escape(log.data.pop('message')) }}</pre></td>
                                 </tr>
                             {% end %}
                             <tr>
