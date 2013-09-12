@@ -158,11 +158,10 @@ class Notifier(object):
         '''
         severity_level = 4
         title = SYSLOG_SEVERITY[4]
-        if store:
-            severity_level = store.level
-            title = SYSLOG_SEVERITY[severity_level]
         url = None
         if store:
+            severity_level = store.level
+            title = SYSLOG_SEVERITY[severity_level]        
             url = urlparse.urljoin(Config.data['url'], '/log_group/{}'.format(store.log_group.id)),
         for user in to:
             if 'send_pushover' in user.notification_types:
