@@ -98,7 +98,10 @@ class Times_seen_by_minute(object):
                 return 0
             if query.times_seen == 0:
                 return 0
-            return int(query.times_seen / ((now - query.time).seconds / 60))
+            seconds_normalized = (now - query.time).seconds / 60
+            if seconds_normalized == 0:
+                return 0
+            return int(query.times_seen / seconds_normalized)
 
     @classmethod
     def _format_from_query(cls, query):
