@@ -7,7 +7,7 @@ from alembic import command
 
 def get_config():
     cfg = alembic.config.Config(os.path.dirname(os.path.abspath(__file__))+'/alembic.ini')
-    cfg.set_main_option('script_location', 'tlog:migrations')
+    cfg.set_main_option('script_location', './migrations')
     cfg.set_main_option('url', Config.data['database']['url'])
     return cfg
 
