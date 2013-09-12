@@ -96,12 +96,12 @@
         </div>
         <div class="col-xs-3 tlog_right_menu" id="log_group_info">
             <div class="item">
-                <p><strong>First seen</strong></p>
-                <p><time class="timeago" datetime="{{ log_group.first_seen.isoformat('T') }}Z" title="{{ log_group.first_seen.isoformat('T') }}Z"></time>
-            </div>
-            <div class="item">
                 <p><strong>Last seen</strong></p>
                 <p><time class="timeago" datetime="{{ log_group.last_seen.isoformat('T') }}Z" title="{{ log_group.last_seen.isoformat('T') }}Z"></time>
+            </div>
+            <div class="item">
+                <p><strong>First seen</strong></p>
+                <p><time class="timeago" datetime="{{ log_group.first_seen.isoformat('T') }}Z" title="{{ log_group.first_seen.isoformat('T') }}Z"></time>
             </div>
             {% if log_group.reopened %}
                 <div class="item">
