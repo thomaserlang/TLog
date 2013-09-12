@@ -124,18 +124,19 @@ class Store(object):
         if not self.valid:
             return False
         save_filters = self.get_save_filters()
+        if save_filters:
+            self.saved = False
+            self.log_group = Log_group.add(self)
+            self.update_count(save_filters)
+            if self.should_sample(times_seen=self.log_group.times_seen, last_seen=self.log_group.last_seen):
+                self.save_log()
+                self.saved = True        
+            Log_group_filters.add(save_filters, self.log_group.id)
+            self.set_events()
+            self.send_notification()
+        self.send_to_elasticsearch()# Check if the message should be stored in ElasticSearch, even if the log message was not saved.
         if not save_filters:
             return False
-        self.saved = False
-        self.log_group = Log_group.add(self)
-        self.update_count(save_filters)
-        if self.should_sample(times_seen=self.log_group.times_seen, last_seen=self.log_group.last_seen):
-            self.save_log()
-            self.saved = True        
-        Log_group_filters.add(save_filters, self.log_group.id)
-        self.set_events()
-        self.send_notification()
-        self.send_to_elasticsearch()
         if self.saved:
             return True
         return None
