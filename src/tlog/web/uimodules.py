@@ -26,7 +26,7 @@ class Log_chart(tornado.web.UIModule):
         :param height: int
         '''
         return self.render_string(
-            'Log_chart.html',
+            'log_chart.html',
             url=url,
             height=height,
         )
