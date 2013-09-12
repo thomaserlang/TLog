@@ -114,7 +114,8 @@ class Filter_warning(object):
             increase
         ))
         if increase > filter_warning.threshold:
-            if Filter_notification_last_sent.check(filter_id=filter_warning.filter.id):                
+            if Filter_notification_last_sent.check(filter_id=filter_warning.filter.id): 
+                logging.info('Sending notification to:')         
                 Filter_notification_last_sent.update(filter_id=filter_warning.filter.id)
                 Notifier.send(
                     message=u'Early warning. Rate of log messages per minute increased from {} to {} (+{}%) for filter {}.'.format(
@@ -126,6 +127,7 @@ class Filter_warning(object):
                     filters=[
                         filter_warning.filter,
                     ],
+                    force_send=True,
                 )
             else:
                 logging.info('Notification sent within the latest 30 minutes')

@@ -20,7 +20,7 @@ class Notifier(object):
     '''
 
     @classmethod
-    def send(cls, message, filters, store=None):
+    def send(cls, message, filters, store=None, force_send=False):
         '''
         Sends notifications to teams that are member of filters.
 
@@ -35,12 +35,14 @@ class Notifier(object):
         :param filters: list of tlog.base.filter.Filter
         :param store: tlog.receiver.store.Store
             Specify `store` if any information should used from the stored log message.
+        :param force_send: boolean
+            if true overrides `notify` in all `filters` and sends notification.
         '''
         user_ids = []
         send_types = {}
         notify_filters = []
         for filter_ in filters:
-            if filter_.data.get('notify', True):
+            if filter_.data.get('notify', True) or (force_send == True):
                 notify_filters.append(filter_)
                 users = Users_team.get_by_team_list(
                     Filter_team.get_teams_by_filter_id(filter_id=filter_.id)
