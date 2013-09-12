@@ -1,4 +1,4 @@
 include setup.py MANIFEST.in src/tlog/alembic.ini
 recursive-include src/tlog/web/templates *
-recursive-include src/tlog/web/static/ *
+recursive-include src/tlog/web/static *
 global-exclude *~
