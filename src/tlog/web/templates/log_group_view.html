@@ -46,6 +46,9 @@
                         <h4>General info</h4>
                         <table class="table table-striped">
                             <tr>
+                                <th>Message</th><td>{{ escape(log.data['message']) }}</td>
+                            </tr>
+                            <tr>
                                 <th>Hostname</th><td>{{ escape(log.hostname) }}</td>
                             </tr>
                             {% if 'priority' in log.data %}

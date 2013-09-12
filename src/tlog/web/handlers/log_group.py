@@ -22,9 +22,6 @@ class Handler(base.Handler):
             if log_group.last_log_id:
                 log_id = log_group.last_log_id
         log = Log.get(id_=log_id)
-        if log:
-            if 'message' in log.data:
-                log.data.pop('message')
         self.render(
             'log_group_view.html',
             title='Log group',
