@@ -11,6 +11,7 @@
         function change_filter(obj) {
             var name = $(obj).attr('name');
             $('#form_log_groups_filter input[name='+name+']').val($(obj).val());
+            $('#log_group_page').val(0);
             get_log_groups();
         }
         $(function() {
