@@ -105,7 +105,7 @@ class Times_seen_user_filters_handler(Times_seen_handler):
 
     @authenticated
     def get(self):
-        from_ = datetime.utcnow() - timedelta(days=int(self.get_argument('days', 1)))
+        from_ = datetime.utcnow() - timedelta(days=int(self.get_argument('days', 7)))
         filters = Filters_user.get(user_id=self.current_user.id)
         now = datetime.utcnow() 
         filter_ids = []
