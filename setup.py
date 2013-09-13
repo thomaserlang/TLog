@@ -15,7 +15,7 @@ mysql_requires = [
 
 setup(
     name='tlog',
-    version='0.1.33',
+    version='0.1.34',
     author='Thomas Erlang',
     author_email='thomas@erlang.dk',
     url='http://tesoft.dk/tlog',

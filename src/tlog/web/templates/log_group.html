@@ -3,8 +3,8 @@
         <div class="level level-{{ log_group.level }}" title="{{ syslog_severity[log_group.level] }} - Times seen: {{ log_group.times_seen }}">
             {{ k_formatter(log_group.times_seen) }}
         </div>
-            <div class="message{% if log_group.status == 1 %} resolved_text{% end %}" title="{{ log_group.message }}">
-                <a href="/log_group/{{ log_group.id }}">{{ log_group.message }}</a>
+            <div class="message{% if log_group.status == 1 %} resolved_text{% end %}" title="{{ escape(log_group.message) }}">
+                <a href="/log_group/{{ log_group.id }}">{{ escape(log_group.message) }}</a>
             </div>
             <div class="extra">
                {{ syslog_severity[log_group.level] }} - <time class="timeago" title="{{ log_group.last_seen.isoformat('T') }}Z" datetime="{{ log_group.last_seen.isoformat('T') }}Z"></time>
