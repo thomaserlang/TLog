@@ -12,9 +12,11 @@ class Parsed(object):
             Uses Syslog severity levels. See http://en.wikipedia.org/wiki/Syslog#Severity_levels
         :param data: dict
             You can add all the fields you like.
-            Fields supported by the web interface:
-                * message
-                * priority
+            Example:
+                - message
+                - priority
+                - severity
+                - facility
         :param standard: str
             The standard which were detected.
             Example: Syslog 5424
