@@ -104,13 +104,13 @@ class Store(object):
     def get_save_filters(self):
         '''
         Returns a list of those filters in `self.matched_filters`, 
-        that has a save equals true.
+        that has a store equals true.
 
         :return: list of tlog.base.filter.Filter
         '''
         save_filters = []
         for filter_ in self.matched_filters:
-            if filter_.data.get('save', True):
+            if filter_.data.get('store', False):
                 save_filters.append(filter_)
         return save_filters
 
