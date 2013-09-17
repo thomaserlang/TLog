@@ -1,26 +1,38 @@
 import logging
-from twisted.internet.protocol import DatagramProtocol
+from twisted.internet.protocol import DatagramProtocol, Protocol, Factory
 from twisted.internet import reactor
 from tlog.worker import receiver
 from tlog.logger import logger
 from tlog.config import Config
 
-class Echo(DatagramProtocol):
+def message_received(data):
+    logging.info('Received: '+data)
+    try:
+        if Config.data['celery']['enabled']:
+            receiver.receive.delay(data)
+        else:
+            receiver.receive(data)
+    except Exception as e:
+        logging.error(unicode(e))  
+
+class UDP_received(DatagramProtocol):
 
     def datagramReceived(self, data, (host, port)):
-        logging.info('Received: '+data)
-        try:
-            if Config.data['celery']['enabled']:
-                receiver.receive.delay(data)
-            else:
-                receiver.receive(data)
-        except Exception as e:
-            logging.error(unicode(e))            
+        message_received(data)
+
+
+class TCP_received(Protocol):
+
+    def dataReceived(self, data):
+        message_received(data)
 
 def main():
     try:
         logger.set_logger('receiver.log')
-        reactor.listenUDP(Config.data['receiver']['port'], Echo())
+        reactor.listenUDP(Config.data['receiver']['port'], UDP_received())
+        factory = Factory()
+        factory.protocol = TCP_received
+        reactor.listenTCP(Config.data['receiver']['port'], factory)
         reactor.run()
     except Exception as e:
         logging.error(unicode(e))      
