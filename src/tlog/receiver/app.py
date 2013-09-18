@@ -1,4 +1,9 @@
 import logging
+try:
+    from twisted.internet import epollreactor
+    epollreactor.install()
+except:
+    pass
 from twisted.internet.protocol import DatagramProtocol, Protocol, Factory
 from twisted.internet import reactor
 from tlog.worker import receiver
@@ -19,7 +24,6 @@ class UDP_received(DatagramProtocol):
 
     def datagramReceived(self, data, (host, port)):
         message_received(data)
-
 
 class TCP_received(Protocol):
 
