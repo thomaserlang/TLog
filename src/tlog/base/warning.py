@@ -3,7 +3,7 @@ from tlog.constants import MINUTE_NORMALIZATION
 from tlog.decorators import new_session
 from sqlalchemy import func
 from datetime import datetime, timedelta
-from tlog.base.filter import Filter
+from tlog.base.filter import Filter, Filters
 from tlog import models
 from tlog import utils
 from tlog.base.notification import Filter_notification_last_sent
@@ -147,3 +147,56 @@ class Filter_warning(object):
             cls.check_filter_warning(
                 filter_warning=filter_warning,
             )
+
+class Filter_inactivity(object):
+
+    @classmethod
+    def check(cls):
+        f = Filters.get()
+        filters = {}
+        filter_ids = []
+        for filter_ in f:
+            if 'inactivity' in filter_.data:
+                if filter_.data['inactivity'].get('enabled', False):
+                    filters[filter_.id] = filter_
+                    filter_ids.append(filter_.id)
+        if not filters:
+            return False
+        with new_session() as session:
+            times_seen = session.query(
+                models.Times_seen_by_minute.filter_id,
+                func.max(models.Times_seen_by_minute.time).label('time'),
+            ).filter(
+                models.Times_seen_by_minute.filter_id.in_(filter_ids),
+            ).group_by(
+                models.Times_seen_by_minute.filter_id,
+            ).all()
+            inactive_filters = []
+            now = datetime.utcnow()
+            for seen in times_seen:
+                max_inactive_minutes = filters[seen.filter_id].data['inactivity'].get('minutes')
+                if max_inactive_minutes < MINUTE_NORMALIZATION:
+                    max_inactive_minutes = MINUTE_NORMALIZATION
+                if ((now - seen.time).seconds / 60) > max_inactive_minutes:
+                    inactive_filters.append(filters[seen.filter_id])
+                filters.pop(seen.filter_id, None)
+            for filter_ in filters:
+                inactivity_filters.append(filters[filter_])
+
+            logging.info('{} inactive filters'.format(len(inactive_filters)))
+            if not inactive_filters:
+                return False
+
+            for filter_ in inactive_filters:
+                if Filter_notification_last_sent.check(filter_id=filter_.id):     
+                    Filter_notification_last_sent.update(filter_id=filter_.id)
+                    Notifier.send(
+                        message=u'Early warning. Filter: {} has been marked as inactive.'.format(
+                            filter_.name,
+                        ), 
+                        filters=[
+                            filter_,
+                        ],
+                        force_send=True,
+                    )
+            return True

@@ -8,7 +8,7 @@ from tlog.receiver.parse import Parse
 from tlog.base.log_group import Log_group
 from tlog.base.count import Times_seen_by_minute
 from datetime import datetime, timedelta
-from tlog.base.warning import Filter_warning
+from tlog.base.warning import Filter_warning, Filter_inactivity
 from tlog.constants import MINUTE_NORMALIZATION
 from tlog.utils import normalize_datetime
 from tlog.decorators import new_session
@@ -122,6 +122,29 @@ class test_filter_warning(Testbase):
         self.assertTrue(
             Filter_warning.check_filter_warning(filters_to_check[0]),
         )
+
+class Test_inactivity(Testbase):
+
+    def test_check(self):
+        with new_session() as session:
+            session.query(models.Filter).delete()
+        filter1 = Filter.new(u'Test filter 1', {
+            'inactivity': {
+                'enabled': True,
+                'minutes': 15,
+            }
+        })
+        store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
+        group1 = Log_group.add(store)
+        group1 = Log_group.get(message_hash=store.message_hash)
+
+        when = datetime.utcnow() - timedelta(minutes=16)     
+        Times_seen_by_minute.update(
+            log_group_id=group1.id,
+            filter_id=filter1.id,
+            when=when,
+        )
+        self.assertTrue(Filter_inactivity.check())
 
 if __name__ == '__main__':
     nose.run(defaultTest=__name__)
