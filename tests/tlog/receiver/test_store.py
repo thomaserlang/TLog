@@ -36,7 +36,7 @@ class test_store(Testbase):
         return Filter.new(
             name=u'Test filter ø', 
             data={
-                'save': True,
+                'store': True,
             }
         )
 
@@ -74,14 +74,14 @@ class test_store(Testbase):
     def test_get_save_filters(self):
         filter1 = self.get_filter()
         filter2 = self.get_filter()
-        filter2.data['save'] = False
+        filter2.data['store'] = False
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su: BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'), [filter1, filter2])
         save_filters = store.get_save_filters()
         self.assertEqual(len(save_filters), 1)
 
     @mock.patch('tlog.base.event.Log_group_event.new', Mock_log_group_event.new)
     def test_set_events(self):
-        filter_ = Filter.new(u'Test filter ø', {'save': True})
+        filter_ = Filter.new(u'Test filter ø', {'store': True})
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su: BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'), [filter_])
         store.save()
 
