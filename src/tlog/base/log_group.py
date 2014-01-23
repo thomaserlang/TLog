@@ -114,7 +114,7 @@ class Log_group(object):
                     return cls._format_from_query(group)
                 except IntegrityError as e:
                     # Try again if there was a duplicate key.
-                    logging.error(unicode(e))
+                    logging.exception('Log message group duplicate key, trying again.')
                     return cls.add(store)
             else:
                 return cls.get(
@@ -293,7 +293,7 @@ class Log_group_filters(object):
                 return True
             except IntegrityError as e:
                 # Try again if there was a duplicate key.
-                logging.error(unicode(e))
+                logging.exception('Log message filter relation duplicate key, trying again.')
                 return cls.add(filters, log_group_id)
 
     @classmethod

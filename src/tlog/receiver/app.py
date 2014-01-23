@@ -18,7 +18,7 @@ def message_received(data):
         else:
             receiver.receive(data)
     except Exception as e:
-        logging.error(unicode(e))  
+        logging.exception('Error doing message storing')  
 
 class UDP_received(DatagramProtocol):
 
@@ -39,4 +39,4 @@ def main():
         reactor.listenTCP(Config.data['receiver']['port'], factory)
         reactor.run()
     except Exception as e:
-        logging.error(unicode(e))      
+        logging.exception('Exception doing receiver startup.')   

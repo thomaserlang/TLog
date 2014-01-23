@@ -1,3 +1,4 @@
+import logging
 from parse import Parse
 from tlog.base.filter import Filters
 from filter_checker import Filters_checker

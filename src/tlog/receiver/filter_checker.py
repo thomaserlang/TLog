@@ -1,4 +1,5 @@
 import re
+import logging
 import tlog.base.filter
 
 class Filter_checker(object):
@@ -153,6 +154,9 @@ class Filters_checker(object):
                 if fs: 
                     matched_filters.extend(cls.check(fs, parsed))
             else:
-                if Filter_checker.check(filter_, parsed):
-                    matched_filters.append(filter_)
+                try:
+                    if Filter_checker.check(filter_, parsed):
+                        matched_filters.append(filter_)
+                except Exception:
+                    logging.exception(u'Failed to validate the message against filter: {}. Probably a syntax error.'.format(filter_.name))
         return matched_filters

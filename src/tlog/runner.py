@@ -67,7 +67,7 @@ def main():
         else:
             sys.exit(1)
     except Exception as e:
-        logging.error(unicode(e))
+        logging.exception('Exception in runner')
         raise
 
 if __name__ == "__main__":

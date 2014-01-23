@@ -26,7 +26,7 @@ class Filter_notification_last_sent(object):
                 return True
             except IntegrityError as e:
                 # Try again if there was a duplicate key.
-                logging.error(unicode(e))
+                logging.exception('Filter notification duplicate key, trying again.')
                 return cls.update(filter_id)
 
     @classmethod
@@ -70,7 +70,7 @@ class Log_group_notification_last_sent(object):
                 return True
             except IntegrityError as e:
                 # Try again if there was a duplicate key.
-                logging.error(unicode(e))
+                logging.exception('Log group notification duplicate key, trying again.')
                 return cls.update(log_group_id)
 
     @classmethod

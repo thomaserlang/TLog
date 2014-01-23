@@ -131,6 +131,7 @@ class test_filter_checker(TestCase):
         }
         self.assertFalse(Filter_checker.check(filter_, parsed))
 
+
 class test_filters_checker(TestCase):
 
     def test_check(self):

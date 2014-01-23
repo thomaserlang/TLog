@@ -182,7 +182,7 @@ class Store(object):
                 session.commit()
             except IntegrityError as e:
                 # try again
-                logging.error(unicode(e))
+                logging.exception('Times seen duplicate key, trying again.')
                 self.update_count(save_filters)
 
     def set_events(self):
@@ -229,28 +229,31 @@ class Store(object):
         '''
         If enabled the received log message will be send to elasticsearch for indexing.
         '''
-        if not Config.data['elasticsearch']['enabled']:
-            return False
-        filters = []
-        filter_ids = []
-        for filter_ in self.matched_filters:
-            if filter_.data.get('searchable', False):
-                filters.append(filter_)
-                filter_ids.append(filter_.id)
-        if not filters:
-            return False
-        data = {
-            'hostname': self.hostname,
-            'level': self.level,
-            'received': self.received,
-            'message_hash': self.message_hash,
-            'data': self.data,
-            'filters': filter_ids,
-        }
-        if self.log_group:
-            data['log_group_id'] = self.log_group.id
-        self.es.index(
-            'logs', 
-            'log', 
-            data,
-        )
+        try:
+            if not Config.data['elasticsearch']['enabled']:
+                return False
+            filters = []
+            filter_ids = []
+            for filter_ in self.matched_filters:
+                if filter_.data.get('searchable', False):
+                    filters.append(filter_)
+                    filter_ids.append(filter_.id)
+            if not filters:
+                return False
+            data = {
+                'hostname': self.hostname,
+                'level': self.level,
+                'received': self.received,
+                'message_hash': self.message_hash,
+                'data': self.data,
+                'filters': filter_ids,
+            }
+            if self.log_group:
+                data['log_group_id'] = self.log_group.id
+            self.es.index(
+                'logs', 
+                'log', 
+                data,
+            )
+        except Exception as e:
+            logging.error(u'Elastic search function failed with the following error: {}'.format(unicode(e)))
