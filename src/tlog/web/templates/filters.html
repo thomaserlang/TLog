@@ -18,21 +18,40 @@
                     <th>Store</th>
                     <th>Notify</th>
                     <th>Searchable</th>
-                    <th> </th>
                 </tr>
             </thead>
             <tbody>
                 {% for filter in filters %}
                     <tr>
                         <td><a href="/filter/{{ filter.id }}">{{ escape(filter.name) }}</a></td>
-                        <td>{{ filter.data.get('store', False) }}</td>
-                        <td>{{ filter.data.get('notify', False) }}</td>
-                        <td>{{ filter.data.get('searchable', False) }}</td>
-                        <td width="20px">
-                            <a href="/filter/{{ filter.id }}">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </a>
-                        </td>
+                        {% if isinstance(filter.data, list) %}
+                            <td colspan="3">
+                                <table class="table">            
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Store</th>
+                                            <th>Notify</th>
+                                            <th>Searchable</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for f in filter.data %}
+                                            <tr>
+                                                <td>{{ f.get('name', '<i>Filter name not specified</i>') }}</td>
+                                                <td>{{ f.get('store', False) }}</td>
+                                                <td>{{ f.get('notify', False) }}</td>
+                                                <td>{{ f.get('searchable', False) }}</td>
+                                            </tr>
+                                        {% end %}
+                                    </tbody>
+                                </table>
+                            </td>
+                        {% else %}
+                            <td>{{ filter.data.get('store', False) }}</td>
+                            <td>{{ filter.data.get('notify', False) }}</td>
+                            <td>{{ filter.data.get('searchable', False) }}</td>
+                        {% end %}
                     </tr>
                 {% end %}
             </tbody>

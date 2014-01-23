@@ -146,18 +146,34 @@ class test_filters_checker(TestCase):
             id_=1,
             version=1,
             name='test',
-            data={
-                'match': {
-                    'hostname': [
-                        'te-pc',
-                    ],
-                    'data': {
-                        'message': [
-                            '^[a-zA-Z ]+$'
+            data=[
+                {
+                    'name': 'test filter 1',
+                    'match': {
+                        'hostname': [
+                            'te-pc',
                         ],
+                        'data': {
+                            'message': [
+                                '^[a-zA-Z ]+$'
+                            ],
+                        }
+                    }
+                },
+                {
+                    'name': 'test filter 2',
+                    'match': {
+                        'hostname': [
+                            'te-pc',
+                        ],
+                        'data': {
+                            'message': [
+                                '^[a-zA-Z ]+$'
+                            ],
+                        }
                     }
                 }
-            }
+            ]
         )
         filter2 = Filter(
             id_=2,
@@ -178,8 +194,9 @@ class test_filters_checker(TestCase):
         )
         filters = [filter1, filter2]
         filter_matches = Filters_checker.check(filters, parsed)
-        self.assertEqual(len(filter_matches), 1)
-        self.assertEqual(filter_matches[0].id, filter1.id)
+        self.assertEqual(len(filter_matches), 2)
+        self.assertEqual(filter_matches[0].id, filter1.id)        
+        self.assertEqual(filter_matches[1].id, filter1.id)
 
 if __name__ == '__main__':
     nose.run(defaultTest=__name__)

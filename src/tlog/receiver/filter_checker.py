@@ -1,4 +1,5 @@
 import re
+import tlog.base.filter
 
 class Filter_checker(object):
 
@@ -44,9 +45,9 @@ class Filter_checker(object):
     @classmethod
     def check(cls, filter_, parsed):
         '''
-        In `filter_` we have match and notmatch to check against parsed.
-        If both match and notmatch is specified, then we have to make sure that
-        match returns true and notmatch return false.
+        In `filter_` we have "match" and "notmatch" to check against the `parsed` object.
+        If both "match" and "notmatch" is specified, then we have to make sure that
+        "match" returns true and "notmatch" return false before the filter is marked as a match.
 
         :param filter_: tlog.base.filter.Filter
         :param parsed: tlog.receiver.parse.parsed.Parsed
@@ -138,6 +139,20 @@ class Filters_checker(object):
         '''
         matched_filters = []
         for filter_ in filters:
-            if Filter_checker.check(filter_, parsed):
-                matched_filters.append(filter_)
+            if isinstance(filter_.data, list):
+                fs = []
+                for f in filter_.data:
+                    fs.append(
+                        tlog.base.filter.Filter(
+                            id_=filter_.id,
+                            version=filter_.version,
+                            name=f.get('name', filter_.name),
+                            data=f,
+                        )
+                    )
+                if fs: 
+                    matched_filters.extend(cls.check(fs, parsed))
+            else:
+                if Filter_checker.check(filter_, parsed):
+                    matched_filters.append(filter_)
         return matched_filters

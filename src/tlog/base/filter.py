@@ -129,11 +129,11 @@ class Filter(object):
         Creates a new filter and adds it to the versioning table.
 
         :param name: str
-        :param data: dict
+        :param data: dict or list of dict
         :returns: Filter
         '''
-        if not isinstance(data, dict):
-            raise Exception('data must be a dict')
+        if not isinstance(data, dict) and not isinstance(data, list):
+            raise Exception('data must be a dict of list of dict')
         with new_session() as session:
             filter_ = models.Filter(
                 name=name, 
