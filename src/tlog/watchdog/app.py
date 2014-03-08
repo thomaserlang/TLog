@@ -54,6 +54,6 @@ def main():
                         )
             down = not check
         except Exception as e:
-            logging.error(u'Watchdog failed with error: {}'.format(send_type, unicode(e)))
+            logging.exception('Watchdog failed')
 
 
