@@ -20,7 +20,7 @@ Example:
                 ]
             }
         },
-        "notmatch": {
+        "not_match": {
             "hostname": [
                 "te-pc"
             ]
@@ -31,9 +31,9 @@ Example:
 
 The filter above would match a log message with any severity level and not coming from te-pc.
 
-## match and notmatch
-`match` and `notmatch` defines what has to match and/or not match.
-Each field specified in `match` and `notmatch` has to be accompanied by a value of a list of regular expressions.
+## match and not_match
+`match` and `not_match` defines what has to match and/or not match.
+Each field specified in `match` and `not_match` has to be accompanied by a value of a list of regular expressions.
 
 ### hostname
 `hostname` is the name of the sender.

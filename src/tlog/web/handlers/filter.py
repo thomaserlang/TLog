@@ -20,7 +20,7 @@ class New_handler(base.Handler):
         form.data.data = '''
             -
                 match:
-                notmatch:
+                not_match:
                 store: true
                 notify: false
                 searchable: false

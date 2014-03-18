@@ -79,7 +79,7 @@ class test_filter_checker(TestCase):
                     ],
                 }
             },
-            'notmatch': {
+            'not_match': {
                 'hostname': [
                     'te-pc',
                 ]
@@ -93,7 +93,7 @@ class test_filter_checker(TestCase):
                     '[0-9]+'
                 ]
             },
-            'notmatch': {
+            'not_match': {
                 'hostname': [
                     'te-pc',
                 ]
@@ -107,7 +107,7 @@ class test_filter_checker(TestCase):
                     '[0-9]+'
                 ]
             },
-            'notmatch': {
+            'not_match': {
                 'hostname': [
                     'kurtkurtsen',
                 ]
@@ -116,7 +116,7 @@ class test_filter_checker(TestCase):
         self.assertTrue(Filter_checker.check(filter_, parsed))
 
         filter_.data = {
-            'notmatch': {
+            'not_match': {
                 'hostname': [
                     'kurtkurtsen',
                 ]
@@ -125,7 +125,7 @@ class test_filter_checker(TestCase):
         self.assertTrue(Filter_checker.check(filter_, parsed))
 
         filter_.data = {
-            'notmatch': {
+            'not_match': {
                 'level': [
                     '[0-9]+',
                 ]

@@ -28,7 +28,7 @@ class Filter_checker(object):
                         '[0-9]+'
                     ]
                 },
-                'notmatch': {
+                'not_match': {
                     'hostname': [
                         'kurtkurtsen',
                     ]
@@ -46,26 +46,26 @@ class Filter_checker(object):
     @classmethod
     def check(cls, filter_, parsed):
         '''
-        In `filter_` we have "match" and "notmatch" to check against the `parsed` object.
-        If both "match" and "notmatch" is specified, then we have to make sure that
-        "match" returns true and "notmatch" return false before the filter is marked as a match.
+        In `filter_` we have "match" and "not_match" to check against the `parsed` object.
+        If both "match" and "not_match" is specified, then we have to make sure that
+        "match" returns true and "not_match" return false before the filter is marked as a match.
 
         :param filter_: tlog.base.filter.Filter
         :param parsed: tlog.receiver.parse.parsed.Parsed
         :returns: boolean
         '''
         match = filter_.data.get('match', None)
-        notmatch = filter_.data.get('notmatch', None)
-        if match or notmatch:
+        not_match = filter_.data.get('not_match', None)
+        if match or not_match:
             parsed_dict = parsed.to_dict_filter_check()
-            if match and notmatch:
+            if match and not_match:
                 match = cls._check(match, parsed_dict)
-                notmatch = cls._check(notmatch, parsed_dict)
-                return ((match == True) and (notmatch == False))
+                not_match = cls._check(not_match, parsed_dict)
+                return ((match == True) and (not_match == False))
             elif match:
                 return cls._check(match, parsed_dict)
-            elif notmatch:
-                return cls._check(notmatch, parsed_dict) == False
+            elif not_match:
+                return cls._check(not_match, parsed_dict) == False
         return False
 
     @classmethod
