@@ -26,9 +26,7 @@ class test_filter_checker(TestCase):
 
         filter_.data = {
             'match': {
-                'message': [
-                    '^[a-zA-Z ]+$'
-                ],
+                'message': '^[a-zA-Z ]+$',
             }
         }
         self.assertTrue(Filter_checker.check(filter_, parsed))

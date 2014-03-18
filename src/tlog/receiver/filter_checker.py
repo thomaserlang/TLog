@@ -112,7 +112,7 @@ class Filter_checker(object):
         :returns: boolean
         '''
         if not isinstance(res, list):
-            raise Exception('`res` must be a list')
+            res = [res]
         for re_str in res:
             re_compiled = cls.compiled_regexes.get(re_str, None)
             if not re_compiled:
