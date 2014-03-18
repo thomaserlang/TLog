@@ -75,12 +75,14 @@ class Filter(base):
     version = Column(Integer, server_default='1')
     name = Column(String(45))
     data = Column(Text)
+    data_yaml = Column(Text)
 
 class Filter_version(base):
     __tablename__ = 'filter_versions'
     filter_id = Column(Integer, primary_key=True, autoincrement=False)
     version = Column(Integer, primary_key=True, autoincrement=False)
     data = Column(Text)
+    data_yaml = Column(Text)
 
 class Filter_team(base):
     __tablename__ = 'filter_teams'

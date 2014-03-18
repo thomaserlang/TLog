@@ -1,6 +1,6 @@
 # coding=UTF-8
 import re
-import json
+import yaml
 from tornado.escape import to_unicode
 from wtforms import Form, TextField, TextAreaField, PasswordField, validators, ValidationError
 
@@ -39,15 +39,15 @@ class Filter(Base):
     name = TextField('Name', [
         validators.Length(min=1, max=45)
     ])
-    data = TextAreaField('Filter JSON', [
+    data = TextAreaField('Filter YAML', [
         validators.Required(),
     ])
 
     def validate_data(form, field):
         try:
-            json.loads(field.data)
-        except:
-            raise ValidationError('Must be valid JSON!')
+            yaml.safe_load(field.data)
+        except Exception, e:
+            raise ValidationError(unicode(e))
 
 class Team(Base):
 

@@ -75,15 +75,11 @@ class test_notifier(Testbase):
         )
         filter1 = Filter.new(
             name=u'Test filter 1', 
-            data={
-                "notify": True
-            }
+            data_yaml='notify: true',
         )
         filter2 = Filter.new(
             name=u'Test filter 2', 
-            data={
-                "notify": False
-            }
+            data_yaml='notify: false',
         )
         # create a relations
         User_team.new(

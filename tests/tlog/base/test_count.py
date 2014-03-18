@@ -12,7 +12,7 @@ class test_times_seen_by_minute(Testbase):
     def test_update(self):
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
         group = Log_group.add(store)
-        filter_ = Filter.new(name=u'Test filter ø', data={})
+        filter_ = Filter.new(name=u'Test filter ø', data_yaml='')
         Times_seen_by_minute.update(
             log_group_id=group.id,
             filter_id=filter_.id,

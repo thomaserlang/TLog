@@ -17,15 +17,14 @@ class New_handler(base.Handler):
         Renders the create new filter form.
         '''
         form = forms.Filter()
-        form.data.data = json.dumps(
-            {
-                "match": {},
-                "notmatch": {},
-                "store": True,
-                "notify": False,
-                "searchable": False,
-            }
-        )
+        form.data.data = '''
+            -
+                match:
+                notmatch:
+                store: true
+                notify: false
+                searchable: false
+        '''
         self.render(
             'filter.html',
             title='New filter',
@@ -43,7 +42,7 @@ class New_handler(base.Handler):
         if form.validate():
             filter_ = Filter.new(
                 name=form.name.data, 
-                data=json.loads(form.data.data),
+                data_yaml=form.data.data,
             )
             self.redirect('/filter/{}'.format(filter_.id))
             return
@@ -71,7 +70,7 @@ class Edit_handler(base.Handler):
             self.error(404, 'Filter not found')
         form = forms.Filter()
         form.name.data = filter_.name
-        form.data.data = json.dumps(filter_.data)
+        form.data.data = filter_.data_yaml
         self.render(
             'filter.html',
             title=u'Filter: {}'.format(filter_.name),
@@ -96,12 +95,10 @@ class Edit_handler(base.Handler):
             self.error(404, 'Filter not found')
         form = forms.Filter(self.request.arguments)
         if form.validate():
-            filter_.name = form.name.data
-            filter_.data = json.loads(form.data.data)
             Filter.update(
                 id_=filter_id,
-                name=filter_.name , 
-                data=filter_.data,
+                name=form.name.data, 
+                data_yaml=form.data.data,
             )
             self.redirect('/filter/{}'.format(filter_.id))
             return

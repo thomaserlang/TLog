@@ -149,6 +149,7 @@ class Filters_checker(object):
                             version=filter_.version,
                             name=f.get('name', filter_.name),
                             data=f,
+                            data_yaml='',
                         )
                     )
                 if fs: 

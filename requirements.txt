@@ -10,3 +10,5 @@ python-dateutil==2.1
 requests==1.2.3
 tornado==3.2
 twisted==13.2.0
+pyyaml
+futures==2.1.6

@@ -24,7 +24,7 @@ class test_filter(Testbase):
         self.assertEqual(data, filter_version.data)
 
     def test_new(self):
-        filter_ = Filter.new(name=u'Test filter ø', data={})
+        filter_ = Filter.new(name=u'Test filter ø', data_yaml='{}')
         self.assertTrue(filter_.id>0)
         self.assertEqual(filter_.name, u'Test filter ø')
         self.assertTrue(isinstance(filter_.data, dict))
@@ -33,11 +33,11 @@ class test_filter(Testbase):
 
 
     def test_update(self):
-        filter_ = Filter.new(name=u'Test filter ø', data={})
+        filter_ = Filter.new(name=u'Test filter ø', data_yaml='')
         Filter.update(
             id_=filter_.id,
             name=u'Test filter 2 ø',
-            data={},
+            data_yaml='{}'
         )
         filter2 = Filter.get(id_=filter_.id)
         self.assertTrue(filter2.id>0)
@@ -55,7 +55,7 @@ class test_filter_team(Testbase):
 
     def test(self):
         # new
-        filter_ = Filter.new(name=u'Test filter ø', data={})
+        filter_ = Filter.new(name=u'Test filter ø', data_yaml='')
         team = Team.new(name=u'Test team ø')
 
         self.assertTrue(
@@ -83,7 +83,7 @@ class test_filter_team(Testbase):
 class test_filters(Testbase):
 
     def test_get(self):
-        Filter.new(u'Test filter ø', {})
+        Filter.new(u'Test filter ø', data_yaml='')
         filters = Filters.get()
         self.assertTrue(len(filters)>0)
 

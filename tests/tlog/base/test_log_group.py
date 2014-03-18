@@ -31,8 +31,8 @@ class test_log_groups(Testbase):
         Tests that both strict and non strict version works.
         '''
 
-        filter1 = Filter.new(name=u'Test filter 1', data={})
-        filter2 = Filter.new(name=u'Test filter 2', data={})
+        filter1 = Filter.new(name=u'Test filter 1', data_yaml='')
+        filter2 = Filter.new(name=u'Test filter 2', data_yaml='')
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
         group = Log_group.add(store)
         group = Log_group.get(message_hash=store.message_hash)
@@ -50,7 +50,7 @@ class test_log_groups(Testbase):
 
 
         # test that the strict version also works.
-        filter2.update(id_=filter2.id, name='Test filter asd', data={})
+        filter2.update(id_=filter2.id, name='Test filter asd', data_yaml='')
         filter2 = Filter.get(id_=filter2.id)
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - NEW MESSAGE ZwPpeQyUtrRKxw5'))
         group = Log_group.add(store)
@@ -77,8 +77,8 @@ class test_log_groups(Testbase):
 class test_filters_log_group(Testbase):
 
     def test_add(self):
-        filter1 = Filter.new(name=u'Test filter 1', data={})
-        filter2 = Filter.new(name=u'Test filter 2', data={})
+        filter1 = Filter.new(name=u'Test filter 1', data_yaml='')
+        filter2 = Filter.new(name=u'Test filter 2', data_yaml='')
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
         group = Log_group.add(store)
         group = Log_group.get(message_hash=store.message_hash)

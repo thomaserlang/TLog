@@ -35,9 +35,7 @@ class test_store(Testbase):
     def get_filter(self):
         return Filter.new(
             name=u'Test filter ø', 
-            data={
-                'store': True,
-            }
+            data_yaml='store: true',
         )
 
     def test_save(self):
@@ -81,7 +79,7 @@ class test_store(Testbase):
 
     @mock.patch('tlog.base.event.Log_group_event.new', Mock_log_group_event.new)
     def test_set_events(self):
-        filter_ = Filter.new(u'Test filter ø', {'store': True})
+        filter_ = Filter.new(u'Test filter ø', data_yaml='store: true')
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su: BOM\'su root\' failed for lonvick on /dev/pts/8 æøå'), [filter_])
         store.save()
 

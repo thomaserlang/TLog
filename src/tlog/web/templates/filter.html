@@ -24,13 +24,6 @@
             var editor = ace.edit("editor");
             var textarea = $('textarea[name="data"]').hide();
             value = textarea.val();
-            try {
-                value = JSON.stringify(
-                    $.parseJSON(value),
-                    null,
-                    4
-                )
-            } catch(err){}
             editor.getSession().setValue(
                 value
             );
@@ -38,8 +31,10 @@
                 textarea.val(editor.getSession().getValue());
             });
             editor.setTheme("ace/theme/monokai");
-            editor.getSession().setMode("ace/mode/json");
+            editor.getSession().setMode("ace/mode/yaml");
             editor.setFontSize(16)
+            editor.getSession().setTabSize(4);
+            editor.getSession().setUseSoftTabs(true);
         </script>
         <button type="submit" class="btn btn-primary">Save</button>
     </form>

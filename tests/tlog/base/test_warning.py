@@ -1,6 +1,7 @@
 # coding=UTF-8
 import nose
 import logging
+import yaml
 from tlog.testbase import Testbase
 from tlog.base.filter import Filter
 from tlog.receiver.store import Store
@@ -22,20 +23,20 @@ class test_filter_warning(Testbase):
         '''
         Checks that `get_filters_to_check` only returns those filters that has been active in the latests interval.
         '''
-        filter1 = Filter.new(u'Test filter 1', {
+        filter1 = Filter.new(u'Test filter 1', yaml.safe_dump({
             'rate_warning': {
                 'enabled': True,
                 'min_logs': 100,
                 'threshold': 500,
             }
-        })
-        filter2 = Filter.new(u'Test filter 1', {
+        }))
+        filter2 = Filter.new(u'Test filter 1', yaml.safe_dump({
             'rate_warning': {
                 'enabled': True,                
                 'min_logs': 100,
                 'threshold': 500,
             }
-        })
+        }))
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
         group1 = Log_group.add(store)
         group1 = Log_group.get(message_hash=store.message_hash)
@@ -88,13 +89,13 @@ class test_filter_warning(Testbase):
     def test_check_filter_warning(self):
         with new_session() as session:
             session.query(models.Filter).delete()
-        filter1 = Filter.new(u'Test filter 1', {
+        filter1 = Filter.new(u'Test filter 1', yaml.safe_dump({
             'rate_warning': {
                 'enabled': True,                
                 'min_logs': 100,
                 'threshold': 500,
             }
-        })
+        }))
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5123'))
         group1 = Log_group.add(store)
 
@@ -128,12 +129,12 @@ class Test_inactivity(Testbase):
     def test_check(self):
         with new_session() as session:
             session.query(models.Filter).delete()
-        filter1 = Filter.new(u'Test filter 1', {
+        filter1 = Filter.new(u'Test filter 1', yaml.safe_dump({
             'inactivity': {
                 'enabled': True,
                 'minutes': 15,
             }
-        })
+        }))
         store = Store(Parse(u'<34>Oct 11 22:14:15 mymachine.example.com su - ID47 - ZwPpeQyUtrRKxw5'))
         group1 = Log_group.add(store)
         group1 = Log_group.get(message_hash=store.message_hash)

@@ -1,4 +1,5 @@
 import json
+import yaml
 from tlog import models
 from tlog.decorators import new_session
 from tlog.base.team import Team
@@ -111,33 +112,34 @@ Set a minimum number of logs received in a minute to trigger the warning.
 
 class Filter(object):
     
-    def __init__(self, id_, version, name, data):
+    def __init__(self, id_, version, name, data_yaml, data):
         '''
         :param id_: int
         :param version: int
         :param name: str
         :param data: dict
+        :param data_yaml: str
         '''
         self.id = id_
         self.version = version
         self.name = name
         self.data = data
+        self.data_yaml = data_yaml
 
     @classmethod
-    def new(cls, name, data):
+    def new(cls, name, data_yaml):
         '''
         Creates a new filter and adds it to the versioning table.
 
         :param name: str
-        :param data: dict or list of dict
+        :param data_yaml: str
         :returns: Filter
         '''
-        if not isinstance(data, dict) and not isinstance(data, list):
-            raise Exception('data must be a dict of list of dict')
         with new_session() as session:
             filter_ = models.Filter(
                 name=name, 
-                data=json.dumps(data),
+                data=json.dumps(yaml.safe_load(data_yaml)),
+                data_yaml=data_yaml,
             )
             session.add(filter_)
             session.commit()
@@ -146,13 +148,13 @@ class Filter(object):
             return filter_
 
     @classmethod
-    def update(cls, id_, name, data):
+    def update(cls, id_, name, data_yaml):
         '''
         Updates the filter and creates a new version in the versioning table.
 
         :param id_: int
         :param name: str
-        :param data: dict
+        :param data_yaml: str
         :returns: boolean
         '''
         with new_session() as session:
@@ -162,8 +164,9 @@ class Filter(object):
                 models.Filter.id==id_,
             ).update({
                 'name': name,
-                'data': json.dumps(data),
+                'data': json.dumps(yaml.safe_load(data_yaml)),
                 'version': models.Filter.version + 1,
+                'data_yaml': data_yaml,
             })
             session.commit()
             Filter_version.new(filter_=cls.get(id_=id_))
@@ -198,6 +201,7 @@ class Filter(object):
             version=query.version,
             name=query.name,
             data=json.loads(query.data),
+            data_yaml=query.data_yaml,
         )
 
 class Filters(object):
@@ -220,7 +224,7 @@ class Filters(object):
 
 class Filter_version(object):
 
-    def __init__(self, filter_id, version, data):
+    def __init__(self, filter_id, version, data, data_yaml):
         '''
 
         :param filter_id: int
@@ -230,6 +234,7 @@ class Filter_version(object):
         self.filter_id = filter_id
         self.version = version
         self.data = data
+        self.data_yaml = data_yaml
 
     @classmethod
     def new(cls, filter_):
@@ -244,6 +249,7 @@ class Filter_version(object):
                 filter_id=filter_.id,
                 version=filter_.version,
                 data=json.dumps(filter_.data),
+                data_yaml=filter_.data_yaml,
             )
             session.add(filter_version)
             session.commit()
@@ -280,6 +286,7 @@ class Filter_version(object):
             filter_id=query.filter_id,
             version=query.version,
             data=json.loads(query.data),
+            data_yaml=query.data_yaml,
         )
 
 class Filter_team(object):

@@ -1,4 +1,5 @@
 import nose
+import yaml
 from unittest2 import TestCase
 from tlog.base.filter import Filter
 from tlog.receiver.filter_checker import Filter_checker, Filters_checker
@@ -19,7 +20,8 @@ class test_filter_checker(TestCase):
             id_=0,
             version=1,
             name='test',
-            data={}
+            data={},
+            data_yaml='',
         )
 
         filter_.data = {
@@ -143,47 +145,25 @@ class test_filters_checker(TestCase):
             },
             standard='Test standard',
         )
-        filter1 = Filter(
-            id_=1,
-            version=1,
-            name='test',
-            data=[
-                {
-                    'name': 'test filter 1',
-                    'match': {
-                        'hostname': [
-                            'te-pc',
-                        ],
-                        'data': {
-                            'message': [
-                                '^[a-zA-Z ]+$'
-                            ],
-                        }
-                    }
-                },
-                {
-                    'name': 'test filter 2',
-                    'match': {
-                        'hostname': [
-                            'te-pc',
-                        ],
-                        'data': {
-                            'message': [
-                                '^[a-zA-Z ]+$'
-                            ],
-                        }
-                    }
-                }
-            ]
-        )
-        filter2 = Filter(
-            id_=2,
-            version=1,
-            name='test',
-            data={
+        data = [
+            {
+                'name': 'test filter 1',
                 'match': {
                     'hostname': [
-                        'something wrong',
+                        'te-pc',
+                    ],
+                    'data': {
+                        'message': [
+                            '^[a-zA-Z ]+$'
+                        ],
+                    }
+                }
+            },
+            {
+                'name': 'test filter 2',
+                'match': {
+                    'hostname': [
+                        'te-pc',
                     ],
                     'data': {
                         'message': [
@@ -192,6 +172,32 @@ class test_filters_checker(TestCase):
                     }
                 }
             }
+        ]
+        filter1 = Filter(
+            id_=1,
+            version=1,
+            name='test',
+            data_yaml=yaml.safe_dump(data),
+            data=data,
+        )
+        data = {
+            'match': {
+                'hostname': [
+                    'something wrong',
+                ],
+                'data': {
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
+                }
+            }
+        }
+        filter2 = Filter(
+            id_=2,
+            version=1,
+            name='test',
+            data=data,
+            data_yaml=yaml.safe_dump(data),
         )
         filters = [filter1, filter2]
         filter_matches = Filters_checker.check(filters, parsed)
