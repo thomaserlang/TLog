@@ -26,11 +26,9 @@ class test_filter_checker(TestCase):
 
         filter_.data = {
             'match': {
-                'data': {
-                    'message': [
-                        '^[a-zA-Z ]+$'
-                    ],
-                }
+                'message': [
+                    '^[a-zA-Z ]+$'
+                ],
             }
         }
         self.assertTrue(Filter_checker.check(filter_, parsed))
@@ -40,11 +38,9 @@ class test_filter_checker(TestCase):
                 'hostname': [
                     'something wrong',
                 ],
-                'data': {
-                    'message': [
-                        '^[a-zA-Z ]+$'
-                    ],
-                }
+                'message': [
+                    '^[a-zA-Z ]+$'
+                ],
             }
         }
         self.assertFalse(Filter_checker.check(filter_, parsed))
@@ -152,11 +148,9 @@ class test_filters_checker(TestCase):
                     'hostname': [
                         'te-pc',
                     ],
-                    'data': {
-                        'message': [
-                            '^[a-zA-Z ]+$'
-                        ],
-                    }
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
                 }
             },
             {
@@ -165,11 +159,9 @@ class test_filters_checker(TestCase):
                     'hostname': [
                         'te-pc',
                     ],
-                    'data': {
-                        'message': [
-                            '^[a-zA-Z ]+$'
-                        ],
-                    }
+                    'message': [
+                        '^[a-zA-Z ]+$'
+                    ],
                 }
             }
         ]
@@ -185,11 +177,9 @@ class test_filters_checker(TestCase):
                 'hostname': [
                     'something wrong',
                 ],
-                'data': {
-                    'message': [
-                        '^[a-zA-Z ]+$'
-                    ],
-                }
+                'message': [
+                    '^[a-zA-Z ]+$'
+                ],
             }
         }
         filter2 = Filter(

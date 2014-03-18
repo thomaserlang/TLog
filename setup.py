@@ -15,11 +15,11 @@ mysql_requires = [
 
 setup(
     name='tlog',
-    version='0.1.42',
+    version='0.2.0',
     author='Thomas Erlang',
     author_email='thomas@erlang.dk',
     url='https://github.com/thomaserlang/tlog',
-    description='Multi logging platform, powerful filters, real-time notifications, early warning system.',
+    description='Multi logging platform, powerful filters, real-time notifications and early warning system.',
     long_description=__doc__,
     package_dir={'': 'src'},
     packages=find_packages('src'),
