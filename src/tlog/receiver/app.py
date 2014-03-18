@@ -11,7 +11,7 @@ from tlog.logger import logger
 from tlog.config import Config
 
 def message_received(data):
-    logging.info('Received: '+data)
+    logging.info('Received: {}'.format(data))
     try:
         if Config.data['celery']['enabled']:
             receiver.receive.delay(data)
