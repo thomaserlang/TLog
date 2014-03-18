@@ -10,13 +10,14 @@ class Receiver(object):
     @classmethod
     def add(cls, data):
         '''
-        :param hostname: str
         :param data: str
+        :returns: boolean
         '''
         cls.check_for_heartbeat_request(data)
         parsed = Parse(data)
         if not parsed:
-            return None
+            logging.notice('Unable to parse log message: {}'.format(data))
+            return False
         filters = Filters.get()
         matched_filters = Filters_checker.check(
             filters=filters, 
@@ -24,7 +25,7 @@ class Receiver(object):
         )
         store = Store(parsed=parsed, matched_filters=matched_filters)
         if not store.save():
-            return None
+            return False
         return True
 
     @classmethod
