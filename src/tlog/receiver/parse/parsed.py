@@ -27,6 +27,9 @@ class Parsed(object):
         self.standard = standard
 
     def to_dict(self):
+        return self.__dict__
+
+    def to_dict_filter_check(self):
         '''
         To make it easier to write filters the dynamic field `data`'s 
         content will be merged with the other data elements without 
@@ -62,7 +65,7 @@ class Parsed(object):
             See how we can skip the data field? Pretty sweet.
 
         '''
-        d = self.__dict__
+        d = dict(self.__dict__)
         if 'data' in d:
             data = d.pop('data')
             d.update(data)

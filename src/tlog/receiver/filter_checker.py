@@ -57,7 +57,7 @@ class Filter_checker(object):
         match = filter_.data.get('match', None)
         notmatch = filter_.data.get('notmatch', None)
         if match or notmatch:
-            parsed_dict = parsed.to_dict()
+            parsed_dict = parsed.to_dict_filter_check()
             if match and notmatch:
                 match = cls._check(match, parsed_dict)
                 notmatch = cls._check(notmatch, parsed_dict)

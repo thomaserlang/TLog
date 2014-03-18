@@ -4,6 +4,7 @@ from unittest2 import TestCase
 from tlog.base.filter import Filter
 from tlog.receiver.filter_checker import Filter_checker, Filters_checker
 from tlog.receiver.parse.parsed import Parsed
+from tlog.receiver.store import Store
 
 class test_filter_checker(TestCase):
     
@@ -20,8 +21,8 @@ class test_filter_checker(TestCase):
             id_=0,
             version=1,
             name='test',
-            data={},
-            data_yaml='',
+            data={'store': True},
+            data_yaml='store: true',
         )
 
         filter_.data = {
@@ -30,6 +31,11 @@ class test_filter_checker(TestCase):
             }
         }
         self.assertTrue(Filter_checker.check(filter_, parsed))
+
+        # check that we do not accidentally remove the `data` field
+        # in th parsed message when validating it against a filter.
+        store = Store(parsed, [filter_])
+        self.assertTrue(isinstance(store, Store))
 
         filter_.data = {
             'match': {
