@@ -19,7 +19,7 @@
     <form method="post" role="form">
         {% module Form(form) %}
         <div id="editor"></div>              
-        <script src="/static/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="/static/js/ace/ace.js?v=2" type="text/javascript" charset="utf-8"></script>
         <script>
             var editor = ace.edit("editor");
             var textarea = $('textarea[name="data"]').hide();
