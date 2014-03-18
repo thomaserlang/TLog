@@ -125,7 +125,7 @@ class Filter_checker(object):
 class Filters_checker(object):
 
     '''
-    Use this class to retrieve which filters matches the parsed message.
+    Use this class to retrieve the filters that matches the parsed message.
     '''
 
     @classmethod
