@@ -42,7 +42,8 @@ class Syslog(object):
     @classmethod 
     def parse_process_info_3164(cls, message):
         '''
-        Retrunes process info from a message and the message, where the process info has been removed.
+        Returns process info from a message and the message, 
+        where the process info has been removed.
 
         Example:
             

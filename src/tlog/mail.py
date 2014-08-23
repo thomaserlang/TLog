@@ -29,7 +29,6 @@ class Mail(object):
         if Config.data['email']['use_tls']:
             session.ehlo()
             session.starttls()
-            session.ehlo
         session.login(
             Config.data['email']['username'],
             Config.data['email']['password'],

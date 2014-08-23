@@ -16,7 +16,7 @@ class Receiver(object):
         cls.check_for_heartbeat_request(data)
         parsed = Parse(data)
         if not parsed:
-            logging.notice('Unable to parse log message: {}'.format(data))
+            logging.warning('Unable to parse log message: {}'.format(data))
             return False
         filters = Filters.get()
         matched_filters = Filters_checker.check(
